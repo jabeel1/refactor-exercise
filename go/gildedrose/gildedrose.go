@@ -30,7 +30,7 @@ func (i *Item) DecrementQuality() {
 }
 
 type ItemIterator interface {
-	Tick()
+	Update()
 	GetItem() Item
 }
 
@@ -40,7 +40,7 @@ type AgedBrie struct {
 	Item
 }
 
-func (a *AgedBrie) Tick() {
+func (a *AgedBrie) Update() {
 	a.IncrementQuality()
 	if a.SellIn <= 0 {
 		a.IncrementQuality()
@@ -59,7 +59,7 @@ type BackStagePasses struct {
 	Item
 }
 
-func (b *BackStagePasses) Tick() {
+func (b *BackStagePasses) Update() {
 	if b.SellIn <= 0 {
 		b.Quality = 0
 		b.SellIn--
@@ -88,7 +88,7 @@ type Sulfuras struct {
 	Item
 }
 
-func (s *Sulfuras) Tick() {}
+func (s *Sulfuras) Update() {}
 
 func (s *Sulfuras) GetItem() Item {
 	return s.Item
@@ -100,7 +100,7 @@ type Default struct {
 	Item
 }
 
-func (d *Default) Tick() {
+func (d *Default) Update() {
 	d.DecrementQuality()
 	if d.SellIn <= 0 {
 		d.DecrementQuality()
@@ -165,7 +165,7 @@ func UpdateQuality(items any) {
 
 func UpdateQualityV2(items []ItemIterator) {
 	for _, item := range items {
-		item.Tick()
+		item.Update()
 	}
 }
 
