@@ -152,25 +152,28 @@ func NewWrappedItems(items []*Item) []ItemIterator {
 	return iters
 }
 
+// UpdateQuality is a bridging function to the new and old updateQuality functions.
+// It takes any type in but is specifically looking for []*Item and []ItemIterator.
+// Any other type provided will cause the function to panic.
 func UpdateQuality(items any) {
 	switch t := items.(type) {
 	case []*Item:
-		UpdateQualityV1(t)
+		updateQualityV1(t)
 	case []ItemIterator:
-		UpdateQualityV2(t)
+		updateQualityV2(t)
 	default:
 		panic(fmt.Sprintf("invalid type provided: %t", t))
 	}
 }
 
-func UpdateQualityV2(items []ItemIterator) {
+func updateQualityV2(items []ItemIterator) {
 	for _, item := range items {
 		item.Update()
 	}
 }
 
-// UpdateQualityV1 is the legacy method of updating the quality of items
-func UpdateQualityV1(items []*Item) {
+// updateQualityV1 is the legacy method of updating the quality of items
+func updateQualityV1(items []*Item) {
 	for i := 0; i < len(items); i++ {
 
 		if items[i].Name != "Aged Brie" && items[i].Name != "Backstage passes to a TAFKAL80ETC concert" {
