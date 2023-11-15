@@ -23,6 +23,16 @@ func main() {
 		{"Conjured Mana Cake", 3, 6}, // <-- :O
 	}
 
+	iterItems := gildedrose.NewWrappedItems(items)
+	copiedItems := make([]*gildedrose.Item, 0, len(items))
+	for _, item := range items {
+		copiedItems = append(copiedItems, &gildedrose.Item{
+			Name:    item.Name,
+			Quality: item.Quality,
+			SellIn:  item.SellIn,
+		})
+	}
+
 	days := 2
 	var err error
 	if len(os.Args) > 1 {
@@ -37,10 +47,12 @@ func main() {
 	for day := 0; day < days; day++ {
 		fmt.Printf("-------- day %d --------\n", day)
 		fmt.Println("Name, SellIn, Quality")
-		for i := 0; i < len(items); i++ {
-			fmt.Println(items[i])
+		for i := 0; i < len(iterItems); i++ {
+			fmt.Printf("new:    %v\n", iterItems[i].GetItem())
+			fmt.Printf("copied: %v\n", copiedItems[i])
 		}
 		fmt.Println("")
-		gildedrose.UpdateQuality(items)
+		gildedrose.UpdateQuality(iterItems)
+		gildedrose.UpdateQuality(copiedItems)
 	}
 }
